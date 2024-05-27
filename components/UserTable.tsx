@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 interface User {
   id: number;
@@ -11,36 +11,11 @@ interface User {
   email: string;
 }
 
-const UserTable = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [error, setError] = useState<string | null>(null);
+interface UserTableProps {
+  users: User[];
+}
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  const fetchUsers = async () => {
-    try {
-      const response = await fetch('/api/users');
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      if (Array.isArray(data)) {
-        setUsers(data);
-      } else {
-        throw new Error('API response is not an array');
-      }
-    } catch (error) {
-      console.error('Error fetching users:', error);
-      setError('Error fetching users');
-    }
-  };
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
+const UserTable: React.FC<UserTableProps> = ({ users }) => {
   return (
     <div>
       <h2>User Table</h2>

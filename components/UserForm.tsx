@@ -2,7 +2,20 @@
 
 import React, { useState } from 'react';
 
-const UserForm = () => {
+interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
+  middleName: string;
+  dateOfBirth: string;
+  email: string;
+}
+
+interface UserFormProps {
+  onUserAdded: (user: User) => void;
+}
+
+const UserForm: React.FC<UserFormProps> = ({ onUserAdded }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [middleName, setMiddleName] = useState('');
@@ -19,7 +32,9 @@ const UserForm = () => {
       body: JSON.stringify({ firstName, lastName, middleName, dateOfBirth, email }),
     });
     if (response.ok) {
-      // Clear form and refresh user table
+      const newUser = await response.json();
+      onUserAdded(newUser);
+      // Clear form
       setFirstName('');
       setLastName('');
       setMiddleName('');
